@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f7f7f7;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+            margin: 0;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>Login</title>
+    <!-- Include Axios library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        <button type="button" onclick="loginUser()">Login</button>
+    </form>
+
+    <script>
+        function loginUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Make a POST request using Axios
+            axios.post('http://localhost:3001/login', {
+                username,
+                password
+            })
+            .then(response => {
+                // Check if the response indicates success
+                if (response.data.success) {
+        // Redirect to '/index.html' on the client-side
+        window.location.href = '/index.html';
+    } else {
+        // Handle unsuccessful login (e.g., display an error message)
+        console.error('Login failed:', response.data.message);
+        alert('Login failed. Please check your credentials and try again.');
+    }
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error.message);
+                // Display an error message to the user
+                alert('Login failed. Please check your credentials and try again.');
+            });
+        }
+    </script>
+</body>
+
+</html>
