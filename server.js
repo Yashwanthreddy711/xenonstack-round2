@@ -4,28 +4,30 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');  // Import the 'path' module
 const UserModel = require('./models/Usermodel');
-const path=require('path')
+const dotenv=require('dotenv')
 
 // Create an Express app
 const app = express();
+dotenv.config();
 
 // Use middleware
 app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://your-connection-string').then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log('Db connected');
 }).catch((err) => {
     console.log(err);
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes
-app.get('/frontend/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/frontend/index.html'));
-});
+// // Routes
+// app.get('/frontend/index.html', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public/frontend/index.html'));
+// });
+app.use(express.json());
 
 app.post("/contact", (req, res) => {
     ContactModel.create(req.body)
@@ -37,12 +39,11 @@ app.post("/contact", (req, res) => {
 });
 
 app.post("/login",(req,res)=>{
-    const {email,password}=req.body;
     UserModel.findOne({email:email})
     .then(user=>{
         if(user){
         if(user.password===password){
-           res.json("Success")
+            res.json({ success: true});
         }
         else{
             res.json("the password is incorrect")
@@ -56,10 +57,12 @@ app.post("/login",(req,res)=>{
 
 // Registration route
 app.post('/', (req, res) => {
+    console.log(req.body);
     UserModel.create(req.body)
         .then((user) => {
             // Redirect to index.html on the client-side
-            res.json({ success: true, redirect: '/index.html' });
+            
+            res.json({ success: true});
         })
         .catch((err) => res.status(500).json({ success: false, error: err }));
 });
