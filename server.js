@@ -38,22 +38,28 @@ app.post("/contact", (req, res) => {
         });
 });
 
-app.post("/login",(req,res)=>{
-    UserModel.findOne({email:email})
-    .then(user=>{
-        if(user){
-        if(user.password===password){
-            res.json({ success: true});
-        }
-        else{
-            res.json("the password is incorrect")
-        }
-    }
-    else{
-        res.json("No record existed")
-    }
-    })
-})
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+     console.log(email,password);
+     
+   const  user= UserModel.findOne({ email: email })
+        console.log(user);
+            if (user) {
+                if (user.password === password) {
+                    console.log(res.json());
+                    res.json({ success: true });
+                   
+                } else {
+                    res.json("The password is incorrect");
+                }
+            } else {
+                res.json("No record existed");
+            }
+        })
+       
+
+
+
 
 // Registration route
 app.post('/', (req, res) => {
